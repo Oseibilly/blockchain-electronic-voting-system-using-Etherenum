@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Decentralized Voting</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .bg-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white bg-pattern">
+    <div class="container mx-auto p-8">
+        <!-- Header with Navigation -->
+        <div class="flex justify-between items-center mb-10">
+            <div>
+                <h1 class="text-4xl font-bold text-cyan-400">Decentralized Voting Using Ethereum Blockchain</h1>
+                <h2 class="text-2xl text-gray-300 mt-2">Admin Panel</h2>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="window.location.href='voting.html'" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                    Go to Voting Page
+                </button>
+                <button id="connectButton" onclick="App.connectWallet()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                    Connect Wallet
+                </button>
+                <button id="disconnectButton" onclick="App.disconnect()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 hidden">
+                    Disconnect
+                </button>
+            </div>
+        </div>
+        
+        <p id="accountAddress" class="text-gray-400 mb-6 text-center">Status: Not Connected</p>
+
+        <div class="max-w-2xl mx-auto grid gap-8">
+            <!-- Add Candidate Section -->
+            <div class="bg-gray-800 bg-opacity-80 backdrop-blur-sm rounded-xl shadow-2xl p-8 border border-gray-700">
+                <h3 class="text-2xl font-semibold mb-6 text-center">Add Candidate</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label for="name" class="block mb-2 text-sm font-medium text-gray-300">Candidate Name</label>
+                        <input type="text" id="name" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500" placeholder="e.g., John Wick">
+                    </div>
+                    <div>
+                        <label for="party" class="block mb-2 text-sm font-medium text-gray-300">Candidate Party</label>
+                        <input type="text" id="party" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500" placeholder="e.g., Democratic Party">
+                    </div>
+                    <button id="addCandidate" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 disabled:bg-gray-500 disabled:cursor-not-allowed" disabled>Add Candidate</button>
+                </div>
+            </div>
+
+            <!-- Define Voting Dates Section -->
+            <div class="bg-gray-800 bg-opacity-80 backdrop-blur-sm rounded-xl shadow-2xl p-8 border border-gray-700">
+                <h3 class="text-2xl font-semibold mb-6 text-center">Define Voting Dates</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+                    <div>
+                        <label for="startDate" class="block mb-2 text-sm font-medium text-gray-300">Start Date</label>
+                        <input type="datetime-local" id="startDate" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                    </div>
+                    <div>
+                        <label for="endDate" class="block mb-2 text-sm font-medium text-gray-300">End Date</label>
+                        <input type="datetime-local" id="endDate" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                    </div>
+                    <div class="md:col-span-2">
+                        <button id="addDate" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 disabled:bg-gray-500 disabled:cursor-not-allowed" disabled>Define Dates</button>
+                    </div>
+                </div>
+                <p id="dates" class="mt-4 text-center text-cyan-300"></p>
+            </div>
+
+            <!-- Current Candidates Section -->
+            <div class="bg-gray-800 bg-opacity-80 backdrop-blur-sm rounded-xl shadow-2xl p-8 border border-gray-700">
+                <h3 class="text-2xl font-semibold mb-6 text-center">Current Candidates</h3>
+                <div id="candidatesList" class="space-y-2">
+                    <!-- Candidates will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@truffle/contract@4.6.29/dist/truffle-contract.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

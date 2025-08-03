@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting Page - Decentralized Voting</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .bg-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white bg-pattern">
+    <div class="container mx-auto p-8">
+        <!-- Header with Navigation -->
+        <div class="flex justify-between items-center mb-10">
+            <div>
+                <h1 class="text-4xl font-bold text-cyan-400">Decentralized Voting Using Ethereum Blockchain</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="window.location.href='admin.html'" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                    Admin Panel
+                </button>
+                <button id="connectButton" onclick="App.connectWallet()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                    Connect Wallet
+                </button>
+                <button id="disconnectButton" onclick="App.disconnect()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 hidden">
+                    Disconnect
+                </button>
+            </div>
+        </div>
+        
+        <p id="accountAddress" class="text-gray-400 mt-2 text-center">Status: Not Connected</p>
+
+        <div class="max-w-4xl mx-auto bg-gray-800 bg-opacity-80 backdrop-blur-sm rounded-xl shadow-2xl p-8 border border-gray-700">
+            <h2 class="text-2xl font-semibold text-center mb-2">Welcome to Voting</h2>
+            <p id="dates" class="text-center text-cyan-300 mb-6">Voting Dates: Not set</p>
+
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-gray-700 rounded-lg">
+                    <thead class="bg-gray-700 text-gray-300 uppercase text-sm leading-normal">
+                        <tr>
+                            <th class="py-3 px-6 text-left">Candidate Name</th>
+                            <th class="py-3 px-6 text-left">Party</th>
+                            <th class="py-3 px-6 text-center">Total Votes</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-white text-sm font-light" id="boxCandidate">
+                        <!-- Candidates will be loaded here dynamically -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="text-center mt-8">
+                <p class="mb-4 text-gray-400">Please select one of the candidates and click the vote button.</p>
+                <button id="voteButton" onclick="App.vote()" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 disabled:bg-gray-500 disabled:cursor-not-allowed" disabled>
+                    Vote
+                </button>
+                <p id="msg" class="mt-4 font-semibold"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@truffle/contract@4.6.29/dist/truffle-contract.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
